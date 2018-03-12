@@ -16,7 +16,7 @@
     </style>
   </head>
 	     <title>Google Maps Multiple Markers</title>
-    	 <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>	
+    	 <script src="https://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>	
     <div id="map"></div>
     <script>
         // Create a <script> tag and set the USGS URL as the source.
@@ -65,19 +65,25 @@
 		} 
 		
 		if (isset($_GET["latLng"])){
-			$data= json_encode($_GET["latLng"]);
-			echo "<script language='text/javascript'>function sayHiFromPHP() { alert(' $data'); }</script>";
+			$latLng= (string)($_GET["latLng"]);
+		//	echo "<script alert(' $latLng'); }</script>";
 		}else{
 			echo "alert";
 			return;
 		}
-		for ($i = 0; i < latLng.length; $i++) {
-			$sql = "INSERT INTO MyGuests (firstname, lastname, email) VALUES('$type', $data[i][0], $data[i][1])";
-		}
-		if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
-		} else {
-			echo "Error: " . $sql . "<br>" . $conn->error;
+		$type = "";
+		$latLngs = explode(",", $latLng);
+		for ($i = 0; $i < count($latLngs) - 1; $i++) {
+		    $y = $i+1;
+            $sql = "INSERT INTO coordinates (Name, Latitude, Longitude) VALUES($type, $latLng[$i], $latLng[$y])";
+			echo " $latLngs[$i] --- $latLngs[$y]razdeleno <br>";
+    		
+    		if ($conn->query($sql) === TRUE) {
+    			echo "New record created successfully";
+    		} else {
+    			echo "Error: " . $sql . "<br>" . $conn->error;
+    		}
+		
 		}
 		$conn->close();
 	?>
